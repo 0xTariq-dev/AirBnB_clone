@@ -21,8 +21,7 @@ class HBNBCommand(cmd.Cmd):
     __classes = {"BaseModel"}
 
     def do_create(self, arg):
-        """
-        Creates a new instance of BaseModel, save it to json file,
+        """Creates a new instance of BaseModel, save it to json file,
         and prints the id.
         """
         arg1 = parse(arg)
@@ -34,7 +33,25 @@ class HBNBCommand(cmd.Cmd):
             print(eval(arg1[0])().id)
             storage.save()
 
-    def emptyline(self, arg):
+    def do_show(self, arg):
+        """Prints the string representation
+        of an instance based on the class name and id.
+        """
+        arg1 = parse(arg)
+        ob = f"{arg1[0]}.{arg1[1]}"
+        obj_dict = storage.all()
+        if len(arg1) == 0:
+            print("** class name missing **")
+        if len(arg1) == 1:
+            print("** instance id missing **")
+        elif arg1[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+        elif ob not in obj_dict:
+            print("** no instance found **")
+        else:
+            print(obj_dict[ob])
+
+    def emptyline(self):
         """Skips any empty line and repeat prompt"""
         pass
 

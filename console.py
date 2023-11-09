@@ -1,7 +1,15 @@
 #!/usr/bin/python3
 """Model console: Defines HBNHCommand class."""
-
 import cmd
+import re
+from models import storage
+from models.base_model import BaseModel
+
+
+def parse(arg):
+    # Splits the argument by characters defined in delim.
+    delim = re.compile(r"[{}[\],\s]+")
+    return re.split(delim, arg)
 
 
 class HBNBCommand(cmd.Cmd):
@@ -9,41 +17,35 @@ class HBNBCommand(cmd.Cmd):
     HBNBCommand:
         The entry point of the command interperter.
     """
-    prompt = "
+    prompt = '(hbnb) '
+    __classes = {"BaseModel"}
 
-    def __init__(self, *args, **kwargs):
+    def do_create(self, arg):
         """
-        Instatiation method for BaseModel class.
-
-        Args:
-            *args (list): list of unamed args.
-            **kwargs (dict): dictionary of keyword args in a key/value pair.
+        Creates a new instance of BaseModel, save it to json file,
+        and prints the id.
         """
-        time_fmt = '%Y-%m-%dT%H:%M:%S.%f'
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-        if len(kwargs) != 0:
-            for key, val in kwargs.items():
-                match key:
-                    case "created_at" or "updated_at":
-                        self.__dict__[key] = datetime.strptime(val, time_fmt)
-                    case "__class__":
-                        pass
-                    case _:
-                        self.__dict__[key] = val
+        arg1 = parse(arg)
+        if len(arg1) == 0:
+            print("** class name missing **")
+        elif arg1[0] not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
         else:
-            models.storage.new(self)
+            print(eval(arg1[0])().id)
+            storage.save()
 
-    def save(self):
-        self.updated_at = datetime.now()
-        models.storage.save()
+    def emptyline(self, arg):
+        """Skips any empty line and repeat prompt"""
+        pass
 
-    def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
-    
-    def to_dict(self):
-        dic = self.__dict__.copy()
-        dic['__class__'] = self.__class__.__name__
-        dic['created_at'] = self.created_at.isoformat()
-        dic['updated_at'] = self.updated_at.isoformat()
+    def do_quit(self, arg):
+        """Quit command to exit the program"""
+        return True
+
+    def do_EOF(self, arg):
+        """Captures CTRL+D interupt command"""
+        print()
+        return True
+
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Model base_model: Defines BaseModel class."""
-
-import uuid
+import models
+from uuid import uuid4
 from datetime import datetime
 
 
@@ -19,37 +19,32 @@ class BaseModel():
             *args (list): list of unamed args.
             **kwargs (dict): dictionary of keyword args in a key/value pair.
         """
-        if len(args) != 0:
-            pass
-        elif len(kwargs) != 0:
-            for key, val in kwargs.items():
-                match key:
-                    case "id":
-                        self.id = val
-                    case "name":
-                        self.name = val
-                    case "created_at":
-                        self.created_at = datetime.strptime(val, '%Y-%m-%dT%H:%M:%S.%f')
-                    case "updated_at":
-                        self.updated_at = datetime.strptime(val, '%Y-%m-%dT%H:%M:%S.%f')
-                    case "__class__":
-                        pass
-                    case _:
-                        self.key = val
-                
+        time_fmt = '%Y-%m-%dT%H:%M:%S.%f'
+        self.id = str(uuid4())
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
+        if len(kwargs) != 0:
+            for k, v in kwargs.items():
+                    if k in ["created_at", "updated_at"]:
+                        self.__dict__[k] = datetime.strptime(v, time_fmt)
+                    else:
+                        self.__dict__[k] = v
         else:
-            self.id = str(uuid.uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            models.storage.new(self)
 
     def save(self):
+        """Saves objects and updates Updated_at with current time"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
+        """Returns the string representation of Class instances"""
+        cl_name = self.__class__.__name__
+        return "[{}] ({}) {}".format(cl_name, self.id, self.__dict__)
     
     def to_dict(self):
         dic = self.__dict__.copy()
         dic['__class__'] = self.__class__.__name__
         dic['created_at'] = self.created_at.isoformat()
         dic['updated_at'] = self.updated_at.isoformat()
+        return dic

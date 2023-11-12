@@ -5,6 +5,11 @@ import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.review import Review
 
 
 def parse(arg):
@@ -19,7 +24,8 @@ class HBNBCommand(cmd.Cmd):
         The entry point of the command interperter.
     """
     prompt = '(hbnb) '
-    __classes = {"BaseModel", "User"}
+    __classes = {"BaseModel", "User", "State", "City", 
+                 "Place", "Amenity", "Review"}
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel, save it to json file,
@@ -78,13 +84,13 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
             return
         else:
-             if obj_dict[ob] is not None:
-                 del obj_dict[ob]
-                 storage.save()
+            if obj_dict[ob] is not None:
+                del obj_dict[ob]
+                storage.save()
 
     def do_update(self, arg):
         """
-        Updates an instance based on the class name 
+        Updates an instance based on the class name
             and id by adding or updating attribute.
         """
         arg1 = parse(arg)
@@ -109,12 +115,14 @@ class HBNBCommand(cmd.Cmd):
         elif len(arg1) < 4:
             print("** value missing ** ")
         else:
-             if arg1[2] not in  ["id", "created_at", "updated_at"]:
+            if arg1[2] not in ["id", "created_at", "updated_at"]:
                 if obj_dict[ob] is not None:
                     setattr(obj_dict[ob], arg1[2], arg1[3])
                     storage.save()
+
     def do_all(self, arg):
-        """Prints all string representation of all instances based or not on the class name."""
+        """Prints all string representation of all instances
+        based or not on the class name."""
         arg1 = parse(arg)
         dict_values = storage.all().values()
         all_list = []
@@ -128,11 +136,10 @@ class HBNBCommand(cmd.Cmd):
                 for value in dict_values:
                     if class_name == value.__class__.__name__:
                         all_list.append(str(value))
-                if len(all_list)!= 0:
+                if len(all_list) != 0:
                     print(all_list)
             else:
                 print("** class doesn't exist **")
-
 
     def emptyline(self):
         """Skips any empty line and repeat prompt"""
@@ -146,6 +153,7 @@ class HBNBCommand(cmd.Cmd):
         """Captures CTRL+D interupt command"""
         print()
         return True
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

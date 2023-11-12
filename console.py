@@ -88,38 +88,45 @@ class HBNBCommand(cmd.Cmd):
                 del obj_dict[ob]
                 storage.save()
 
-    def do_update(self, arg):
-        """
-        Updates an instance based on the class name
-            and id by adding or updating attribute.
-        """
-        arg1 = parse(arg)
-        if not arg:
+    def do_update(self, line):
+        """Updates an instance based on the class name and id."""
+        args = []
+        quote = False
+        current_arg = ""
+
+        for c in line:
+            if c == ' ' and not in_quotes:
+                args.append(current_arg)
+                current_arg = ""
+            elif c == '"':
+                in_quotes = not in_quotes
+            else:
+                current_arg += c
+
+        if current_arg:
+            args.append(current_arg)
+
+        if len(args) < 1:
             print("** class name missing **")
+        elif not self.check_class(args[0]):
             return
-        elif arg1[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
-            return
-        elif len(arg1) < 2:
+        elif len(args) < 2:
             print("** instance id missing **")
-            return
-
-        ob = arg1[0] + '.' + arg1[1]
-        obj_dict = storage.all()
-
-        if ob not in obj_dict:
-            print("** no instance found **")
-            return
-        elif len(arg1) < 3:
+        elif len(args) < 3:
             print("** attribute name missing **")
-        elif len(arg1) < 4:
-            print("** value missing ** ")
+        elif len(args) < 4:
+            print("** value missing **")
         else:
-            if arg1[2] not in ["id", "created_at", "updated_at"]:
-                if obj_dict[ob] is not None:
-                    setattr(obj_dict[ob], arg1[2], arg1[3])
-                    storage.save()
-
+            obj_key = "{}.{}".format(args[0], args[1])
+            if obj_key in storage.all():
+                instance = storage.all()[obj_key]
+                attribute_name = args[2]
+                value = args[3]
+                setattr(instance, attribute_name, value)
+                storage.save()
+            else:
+                print("** no instance found **")
+                
     def do_all(self, arg):
         """Prints all string representation of all instances
         based or not on the class name."""
@@ -153,6 +160,8 @@ class HBNBCommand(cmd.Cmd):
         """Captures CTRL+D interupt command"""
         print()
         return True
+
+
 
 
 if __name__ == '__main__':

@@ -1,27 +1,29 @@
 #!/usr/bin/python3
-"""Model place: Defines Place class."""
+""""Place Model: Defines Place class. """
+
 from models.base_model import BaseModel
 
 
 class Place(BaseModel):
-    """Class place: Defines New Places.
+    """
+    Class Place : Defines New Place.
 
     Attributes:
-        city_id: string - empty string (City id)
-        user_id: string - empty string (User id)
-        name: string - empty string (Place name)
-        description: string - empty string (Place description)
-        number_rooms: integer - 0 (Number of rooms)
-        number_bathrooms: integer - 0 (Number of bathrooms)
-        max_guest: integer - 0 (Max number of guests)
-        price_by_night: integer - 0 (Night price)
-        latitude: float - 0.0 (Latitude index)
-        longitude: float - 0.0 (Longitude index)
-        amenity_ids: list of string - empty list (List of amenity ids)
+        name: (str) -> empty string
+        city_id: (str) -> empty string: it will be the City.id
+        user_id: (str) -> empty string: it will be the User.id
+        description: (str) -> empty string
+        number_rooms: (int) -> 0
+        number_bathrooms: (int) -> 0
+        max_guest: (int) -> 0
+        price_by_night: (int) -> 0
+        latitude: (float) -> 0.0
+        longitude: (float) -> 0.0
+        amenity_ids: list of string - empty list: list of Amenity.id.
     """
+    name = ""
     city_id = ""
     user_id = ""
-    name = ""
     description = ""
     number_rooms = 0
     number_bathrooms = 0

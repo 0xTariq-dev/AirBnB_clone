@@ -10,7 +10,7 @@ class BaseModel():
     BaseModel:
         Defines All common attributes/methods for other classes in this project
     """
-    
+
     def __init__(self, *args, **kwargs):
         """
         Instatiation method for BaseModel class.
@@ -25,10 +25,10 @@ class BaseModel():
         self.updated_at = datetime.now()
         if len(kwargs) != 0:
             for k, v in kwargs.items():
-                    if k in ["created_at", "updated_at"]:
-                        self.__dict__[k] = datetime.strptime(v, time_fmt)
-                    else:
-                        self.__dict__[k] = v
+                if k in ["created_at", "updated_at"]:
+                    self.__dict__[k] = datetime.strptime(v, time_fmt)
+                else:
+                    self.__dict__[k] = v
         else:
             models.storage.new(self)
 
@@ -41,7 +41,7 @@ class BaseModel():
         """Returns the string representation of Class instances"""
         cl_name = self.__class__.__name__
         return "[{}] ({}) {}".format(cl_name, self.id, self.__dict__)
-    
+
     def to_dict(self):
         dic = self.__dict__.copy()
         dic['__class__'] = self.__class__.__name__

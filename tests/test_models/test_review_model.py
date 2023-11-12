@@ -12,7 +12,7 @@ class TestReview(unittest.TestCase):
         self.review.text = "Excellent, with a good view."
         self.review.place_id = "Amesterdam"
         self.review.user_id = "543"
-        
+
     # Use the tearDown method to delete the instance of Review
     def tearDown(self):
         del self.review

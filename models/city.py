@@ -1,14 +1,16 @@
 #!/usr/bin/python3
-"""Model city: Defines City class."""
+""""City Model: Defines State class. """
+
 from models.base_model import BaseModel
 
 
 class City(BaseModel):
-    """Class City: Defines New Cities.
+    """
+    Class City : Defines New City.
 
     Attributes:
-        state_id: string - empty string
-        name: string - empty string
+        state_id: (str) -> empty string
+        name: (str) -> empty string
     """
     state_id = ""
     name = ""

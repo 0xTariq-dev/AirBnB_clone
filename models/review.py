@@ -1,16 +1,18 @@
 #!/usr/bin/python3
-"""Model review: Defines Review class."""
+""""Review Model: Defines Review class. """
+
 from models.base_model import BaseModel
 
 
 class Review(BaseModel):
-    """Class Review: Defines New Reviews.
-
-    Attributes:
-        place_id: string - empty string (Id of place reviewed)
-        user_id: string - empty string (Id of User reviewing)
-        text: string - empty string (The review body)
     """
-    place_id = ""
+    Class Review : Defines New Review.
+
+    Public class attributes:
+        place_id: (str) -> empty string: it will be the Place.id
+        user_id: (str) -> empty string: it will be the User.id
+        text: (str) -> empty string
+    """
     user_id = ""
+    place_id = ""
     text = ""

@@ -1,12 +1,14 @@
 #!/usr/bin/python3
-"""Model state: Defines State class."""
+""""State Model: Defines State class. """
+
 from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """Class State: Defines New states.
+    """
+    Class State : Defines New State.
 
     Attributes:
-        name: string - empty string
+        name: (str) -> empty string
     """
     name = ""

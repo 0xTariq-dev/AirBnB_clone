@@ -1,12 +1,14 @@
 #!/usr/bin/python3
-"""Model amenity: Defines Amenity class."""
+""""Amenity Model: Defines Amenity class. """
+
 from models.base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    """Class Amenity: Defines New amenities.
+    """
+    Class Amenity : Defines New Amenity.
 
     Attributes:
-        name: string - empty string
+        name: (str) -> empty string
     """
     name = ""

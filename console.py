@@ -5,11 +5,11 @@ import re
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-from models.amenity import Amenity
 from models.city import City
 from models.state import State
 from models.place import Place
 from models.review import Review
+from models.amenity import Amenity
 
 
 def parse(arg):
@@ -24,8 +24,8 @@ class HBNBCommand(cmd.Cmd):
         The entry point of the command interperter.
     """
     prompt = '(hbnb) '
-    __classes = {"BaseModel", "User", "State", "City", 
-                 "Place", "Amenity", "Review"}
+    __classes = {"BaseModel", "User", "State",
+                 "City", "Place", "Review", "Amenity"}
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel, save it to json file,

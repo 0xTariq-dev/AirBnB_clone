@@ -20,10 +20,9 @@ class TestPlace(unittest.TestCase):
         self.place.latitude = 52.370216
         self.place.longitude = 4.895168
         self.place.amenity_ids = ["TV", "Air condition", "Game room"]
-        
 
-    # Use the tearDown method to delete the instance of Place
     def tearDown(self):
+        # Use the tearDown method to delete the instance of Place
         del self.place
 
     # Write a test method for the __init__ method of the Place class

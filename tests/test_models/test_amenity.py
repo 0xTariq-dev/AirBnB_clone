@@ -47,7 +47,7 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertIn(self.amenity.id, amenity_str)
         self.assertIn(str(self.amenity.__dict__), amenity_str)
 
-        
+ 
 class TestAmenity_to_dict(unittest.TestCase):
     # Write a test method for the to_dict method of the Amenity class
 

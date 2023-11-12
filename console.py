@@ -27,6 +27,13 @@ class HBNBCommand(cmd.Cmd):
     __classes = {"BaseModel", "User", "State",
                  "City", "Place", "Review", "Amenity"}
 
+    def cls_check(self, class_name):
+        """Class name validator"""
+        if class_name not in HBNBCommand.__classes:
+            print("** class doesn't exist **")
+            return False
+        return True
+
     def do_create(self, arg):
         """Creates a new instance of BaseModel, save it to json file,
         and prints the id.
@@ -34,8 +41,8 @@ class HBNBCommand(cmd.Cmd):
         arg1 = parse(arg)
         if not arg:
             print("** class name missing **")
-        elif arg1[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
+        elif not self.cls_check(arg1[0]):
+            return
         else:
             print(eval(arg1[0])().id)
             storage.save()
@@ -48,8 +55,7 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        elif arg1[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
+        elif not self.cls_check(arg1[0]):
             return
         elif len(arg1) < 2:
             print("** instance id missing **")
@@ -70,8 +76,7 @@ class HBNBCommand(cmd.Cmd):
         if not arg:
             print("** class name missing **")
             return
-        elif arg1[0] not in HBNBCommand.__classes:
-            print("** class doesn't exist **")
+        elif not self.cls_check(arg1[0]):
             return
         elif len(arg1) < 2:
             print("** instance id missing **")
@@ -88,45 +93,45 @@ class HBNBCommand(cmd.Cmd):
                 del obj_dict[ob]
                 storage.save()
 
-    def do_update(self, line):
+    def do_update(self, arg):
         """Updates an instance based on the class name and id."""
-        args = []
+        arg1 = []
         quote = False
-        current_arg = ""
+        curr = ""
 
-        for c in line:
-            if c == ' ' and not in_quotes:
-                args.append(current_arg)
-                current_arg = ""
+        for c in arg:
+            if c == ' ' and not quote:
+                arg1.append(curr)
+                curr = ""
             elif c == '"':
-                in_quotes = not in_quotes
+                quote = not quote
             else:
-                current_arg += c
+                curr += c
 
-        if current_arg:
-            args.append(current_arg)
+        if curr:
+            arg1.append(curr)
 
-        if len(args) < 1:
+        if len(arg1) < 1:
             print("** class name missing **")
-        elif not self.check_class(args[0]):
+        elif not self.cls_check(arg1[0]):
             return
-        elif len(args) < 2:
+        elif len(arg1) < 2:
             print("** instance id missing **")
-        elif len(args) < 3:
+        elif len(arg1) < 3:
             print("** attribute name missing **")
-        elif len(args) < 4:
+        elif len(arg1) < 4:
             print("** value missing **")
         else:
-            obj_key = "{}.{}".format(args[0], args[1])
+            obj_key = "{}.{}".format(arg1[0], arg1[1])
             if obj_key in storage.all():
                 instance = storage.all()[obj_key]
-                attribute_name = args[2]
-                value = args[3]
+                attribute_name = arg1[2]
+                value = arg1[3]
                 setattr(instance, attribute_name, value)
                 storage.save()
             else:
                 print("** no instance found **")
-                
+
     def do_all(self, arg):
         """Prints all string representation of all instances
         based or not on the class name."""
@@ -147,6 +152,46 @@ class HBNBCommand(cmd.Cmd):
                     print(all_list)
             else:
                 print("** class doesn't exist **")
+
+    def precmd(self, arg):
+        """Executes before arg"""
+        pattern = re.compile(r"(\S+)\.(\S+)\((.*)\)")
+        match = pattern.search(arg)
+        if not match:
+            return arg
+
+        matched = match.groups()
+        if matched[1] == "all":
+            return "{} {}".format(matched[1], matched[0])
+        elif matched[1] == "count":
+            count = 0
+            for i in storage.all().keys():
+                pattern = re.compile(r"{}".format(matched[0]))
+                if pattern.match(i):
+                    count += 1
+            print(count)
+            return "\n"
+        elif matched[1] in ["show", "destroy"]:
+            return "{} {} {}".format(matched[1], matched[0], matched[2][1:-1])
+        elif matched[1] == "update":
+            args = matched[2].split(", ")
+            if args[1][0] == "{":
+                obj_key = "{}.{}".format(matched[0], eval(matched[2])[0])
+                if obj_key in storage.all():
+                    obj = storage.all()[obj_key]
+                    update_dict = eval(matched[2])[1]
+                    for key, value in update_dict.items():
+                        setattr(obj, key, value)
+                    storage.save()
+                else:
+                    print("** no instance found **")
+                return "\n"
+            elif len(args) == 3:
+                return "{} {} {} {} {}".format(
+                        matched[1], matched[0],
+                        args[0][1:-1], args[1][1:-1], args[2])
+        else:
+            return "command doesn't exist"
 
     def emptyline(self):
         """Skips any empty line and repeat prompt"""

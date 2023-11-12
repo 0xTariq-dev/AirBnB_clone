@@ -2,6 +2,12 @@
 """Model file_storage: Defines FileStorage class."""
 import json
 from models.base_model import BaseModel
+from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.state import State
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage():
@@ -22,7 +28,8 @@ class FileStorage():
     
     def new(self, obj):
         """Create a new entry in __objects for obj by <obj class name>.id"""
-        obj_name = f'{obj.__class__.__name__}.{obj.id}'
+        obj_name = obj.__class__.__name__ + '.' + obj.id
+
         FileStorage.__objects[obj_name] = obj
         
     def save(self):

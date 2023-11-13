@@ -18,6 +18,16 @@ class TestUser(unittest.TestCase):
     def tearDown(self):
         del self.user
 
+
+    def test_no_args(self):
+    # Test instance type.
+        self.assertEqual(User,type(User()))
+
+
+    def test_new_instance_save(self):
+        # Test that instance is saved correctly.
+        self.assertIn(User(), models.storage.all().values())
+
     # Write a test method for the __init__ method of the User class
     def test_init(self):
         # Check that the instance inherits from BaseModel
@@ -68,3 +78,4 @@ class TestUser(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

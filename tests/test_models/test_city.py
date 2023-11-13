@@ -16,6 +16,15 @@ class TestCity(unittest.TestCase):
     def tearDown(self):
         del self.city
 
+    def test_no_args(self):
+        # Test instance type.
+        self.assertEqual(City,type(City()))
+
+
+    def test_new_instance_save(self):
+        # Test that instance is saved correctly.
+        self.assertIn(self.city, models.storage.all().values())
+
     # Write a test method for the __init__ method of the City class
     def test_init(self):
         # Check that the instance inherits from BaseModel

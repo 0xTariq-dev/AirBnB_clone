@@ -1,7 +1,7 @@
 import unittest
 from models.base_model import BaseModel
 from models.place import Place
-
+import models
 
 class TestPlace(unittest.TestCase):
     # Use the setUp method to create an instance of Place
@@ -24,6 +24,15 @@ class TestPlace(unittest.TestCase):
     def tearDown(self):
         # Use the tearDown method to delete the instance of Place
         del self.place
+
+    def test_no_args(self):
+        # Test instance type.
+        self.assertEqual(Place,type(Place()))
+
+
+    def test_new_instance_save(self):
+        # Test that instance is saved correctly.
+        self.assertIn(self.place, models.storage.all().values())
 
     # Write a test method for the __init__ method of the Place class
     def test_init(self):

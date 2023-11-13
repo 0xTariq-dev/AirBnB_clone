@@ -1,7 +1,7 @@
 import unittest
 from models.base_model import BaseModel
 from models.state import State
-
+import models
 
 class TestState(unittest.TestCase):
     # Use the setUp method to create an instance of State
@@ -14,6 +14,16 @@ class TestState(unittest.TestCase):
     # Use the tearDown method to delete the instance of State
     def tearDown(self):
         del self.state
+
+
+    def test_no_args(self):
+        # Test instance type.
+        self.assertEqual(State,type(State()))
+
+
+    def test_new_instance_save(self):
+        # Test that instance is saved correctly.
+        self.assertIn(self.state, models.storage.all().values())
 
     # Write a test method for the __init__ method of the State class
     def test_init(self):

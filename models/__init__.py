@@ -1,4 +1,4 @@
-#!usr/bin/python3
+#!/usr/bin/python3
 """Initial Method for models package"""
 from models.engine.file_storage import FileStorage
 

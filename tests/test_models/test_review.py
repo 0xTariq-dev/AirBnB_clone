@@ -17,6 +17,16 @@ class TestReview(unittest.TestCase):
     def tearDown(self):
         del self.review
 
+    def test_no_args(self):
+        # Test instance type.
+        self.assertEqual(Review,type(Review()))
+
+
+    def test_new_instance_save(self):
+        # Test that instance is saved correctly.
+        self.assertIn(Review(), models.storage.all().values())
+
+
     # Write a test method for the __init__ method of the Review class
     def test_init(self):
         # Check that the instance inherits from BaseModel

@@ -20,7 +20,7 @@ class TestUser(unittest.TestCase):
 
 
     def test_no_args(self):
-    # Test instance type.
+        # Test instance type.
         self.assertEqual(User,type(User()))
 
 

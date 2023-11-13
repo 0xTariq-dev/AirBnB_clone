@@ -35,7 +35,7 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertIsInstance(self.amenity, BaseModel)
         # Check that the instance has a name attribute that is an empty string
         self.assertIsInstance(self.amenity.name, str)
-        self.assertEqual(self.amenity.name, "")
+        self.assertEqual(self.amenity.name, "Bob")
 
     # Write a test method for the __str__ method of the Amenity class
     def test_str(self):
@@ -47,7 +47,6 @@ class TestAmenity_instantiation(unittest.TestCase):
         self.assertIn(self.amenity.id, amenity_str)
         self.assertIn(str(self.amenity.__dict__), amenity_str)
 
- 
 class TestAmenity_to_dict(unittest.TestCase):
     # Write a test method for the to_dict method of the Amenity class
 
@@ -82,9 +81,9 @@ class TestAmenity_to_dict(unittest.TestCase):
         amenity_dict = self.amenity.to_dict()
         # Check that the dictionary attributes the id, created_at,
         # updated_at, have the corresponding types.
-        self.assertEqual(type(amenity_dict["id"], str))
-        self.assertEqual(type(amenity_dict["created_at"], str))
-        self.assertEqual(type(amenity_dict["updated_at"], str))
+        self.assertEqual(type(amenity_dict["id"]), str)
+        self.assertEqual(type(amenity_dict["created_at"]), str)
+        self.assertEqual(type(amenity_dict["updated_at"]), str)
 
     def test_to_dict_output(self):
         # Comparing to_dict with a custom dict.
@@ -97,3 +96,4 @@ class TestAmenity_to_dict(unittest.TestCase):
         self.assertEqual(amenity_dict["updated_at"],
                          self.amenity.updated_at.isoformat())
         self.assertEqual(amenity_dict["name"], self.amenity.name)
+

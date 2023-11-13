@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Model file_storage: Defines FileStorage class."""
 import json
+import os
 from models.base_model import BaseModel
 from models.user import User
 from models.city import City
@@ -49,8 +50,10 @@ class FileStorage():
             return
         try:
             with open(FileStorage.__file_path) as f:
-                objects = json.load(f)
-                for item in objects.values():
+                if os.path.getsize(FileStorage.__file_path) == 0:
+                    return
+                obj_dict = json.load(f)
+                for item in obj_dict.values():
                     cls_name = item["__class__"]
                     del item["__class__"]
                     self.new(eval(cls_name)(**item))
